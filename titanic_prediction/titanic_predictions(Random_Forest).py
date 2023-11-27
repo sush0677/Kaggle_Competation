@@ -34,45 +34,20 @@ X = train_data.drop('Survived', axis=1)
 y = train_data['Survived']
 
 # Splitting the data into training and validation sets
-X_train,X_val, y_train, y_val = train_test_split(X, y,test_size=0.2, random_state=108)
+X_train,X_val, y_train, y_val = train_test_split(X, y,test_size=0.2, random_state=107)
 
 # Hyperparameter tuning
 param_grid = {
-    'n_estimators': [200, 500, 1000],
-    'max_depth': [None, 10, 20, 30],
-    'min_samples_leaf': [1, 2, 4],
-    'max_features': ['auto', 'sqrt', 'log2']
+    'max_depth': [5]
 }
 
 # Building the Random Forest model
-rf_model = RandomForestClassifier(random_state=108)
-grid_search = GridSearchCV(estimator=rf_model, param_grid=param_grid, cv=3, n_jobs=-1, verbose=2)
+rf_model = RandomForestClassifier(random_state=107)
+grid_search = GridSearchCV(estimator=rf_model, param_grid=param_grid)
 grid_search.fit(X_train, y_train)
 
 # Training the model
 best_rf = grid_search.best_estimator_
-# max_iterations = 1000  # Set a limit to avoid infinite loops
-# target_accuracy = 0.95
-# best_accuracy = 0
-# best_random_state = None
-#
-# for i in range(max_iterations):
-#     rf_model = RandomForestClassifier(random_state=i)
-#     rf_model.fit(X_train, y_train)
-#     predictions = rf_model.predict(X_val)
-#     accuracy = accuracy_score(y_val, predictions)
-#
-#     if accuracy > best_accuracy:
-#         best_accuracy = accuracy
-#         best_random_state = i
-#
-#     if accuracy >= target_accuracy:
-#         print(f"Reached target accuracy of {target_accuracy*100}% with random_state={i}")
-#         break
-#
-# if best_accuracy < target_accuracy:
-#     print(f"Did not reach target accuracy. Best achieved was {best_accuracy*100}% with random_state={best_random_state}")
-
 y_pred = best_rf.predict(X_val)
 report = classification_report(y_val, y_pred)
 
